@@ -1,0 +1,184 @@
+<div>
+  <app-menu></app-menu>
+</div>
+
+<div style="text-align:end; margin: 40px; margin-top: 200px;" >
+  <button (click)="nuevo()" type="button" class="btn btn-primary btn-lg mb-3"> Nuevo Producto</button>
+</div>
+
+<div style="transition: 2s;" *ngIf="enableNewProducto">
+  <form [formGroup]="formFirestore" class="formulario" id="datosform">
+
+    <h1>Ingrese datos del Producto</h1>
+
+     <div class="contenedor">
+
+      <i class="fa-solid fa-xmark icon2 fa-3x" (click)="enableNewProducto= false;"></i>
+
+          <div class="input-contenedor">
+            <i class="fas fa-user icon"></i>
+            <input type="text" formControlName="name" placeholder="Nombre">
+          </div>
+
+          <div class="input-contenedor">
+            <i class="fa-solid fa-boxes-stacked icon"></i>
+            <input  type="text" formControlName="categoria" placeholder="Categoria">
+          </div>
+
+          <div class="input-contenedor">
+            <i class="fa-solid fa-money-bill-1-wave icon"></i>
+            <input type="number" formControlName="precioNormal" placeholder="Precio normal">
+          </div>
+
+          <div class="input-contenedor">
+              <i class="fa-regular fa-money-bill-1 icon"></i>
+              <input type="number" formControlName="precioReducido" placeholder="Precio reducido">
+          </div>
+
+
+          <!-- Agregar imagenes -->
+            <button class="btn btn-primary btn-lg mb-3">
+              <label for="file-upload">
+                <i class="fa-solid fa-images"></i> Foto:
+              </label>
+              <input (change)="newImageUpload($event)" id="file-upload" type="file" style="display: none;" accept="image/*">
+            </button>
+
+
+         <input type="submit" value="Agregar" class="button" form="firestoreform" (click)="guardarProducto()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+         </div>
+  </form>
+</div>
+
+
+<!-- Modal se agrego un producto-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body abs-center" >
+        <h3>El producto se agrego con exito</h3>
+        <img src="assets/Gif/verificado.gif" alt="" width="200px" class="mx-auto d-block">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngFor="let producto of productos">
+  <section class="mx-auto my-5" style="max-width: 20rem;">
+
+    <div class="card">
+      <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+
+        <!-- aqui ponemos la imagen de los productos -->
+        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg" alt="Card image cap" />
+        <a href="#!">
+          <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+        </a>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+
+          <!-- aqui ponemos el nombre de los articulos -->
+          <a class="btn p-md-1 my-1">{{producto.name}}</a>
+          <div>
+
+            <a type="button" data-bs-toggle="modal" data-bs-target="#modificarProduct">
+              <i class="fa-solid fa-pen-to-square" data-mdb-toggle="tooltip" data-mdb-placement="top"
+               title="Editar"></i>
+            </a>
+
+
+            <a type="button" data-bs-toggle="modal" data-bs-target="#eliminarProducto">
+              <i class="fa-solid fa-trash-can p-3" data-mdb-toggle="tooltip" data-mdb-placement="top"
+                title="Eliminar" color="danger"></i>
+            </a>
+
+          <!-- Modal de eliminar un producto-->
+            <div class="modal fade" id="eliminarProducto" tabindex="-1" aria-labelledby="eliminarProducto" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h2 class="title aling-center">Advertencia</h2>
+                    <br>
+                    <p>Seguro que deseas eliminar este producto</p>
+                    <img src="assets/Gif/basura.gif" alt="" width="100px" class="mx-auto d-block">
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="delateProducto(producto)" data-bs-toggle="modal" data-bs-target="#confirmaEliminar">Si</button>
+                 </div>
+                </div>
+             </div>
+            </div>
+
+
+
+<!-- Modal de modificar un producto -->
+<div class="modal fade" id="modificarProducto" tabindex="-1" aria-labelledby="modificarProducto" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modificarProductol">Modificar Producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="input-contenedor">
+            <i class="fas fa-user icon"></i>
+            <input type="text" formControlName="name" placeholder="Nombre">
+          </div>
+
+          <div class="input-contenedor">
+            <i class="fa-solid fa-boxes-stacked icon"></i>
+            <input  type="text" formControlName="categoria" placeholder="Categoria">
+          </div>
+
+          <div class="input-contenedor">
+            <i class="fa-solid fa-money-bill-1-wave icon"></i>
+            <input type="number" formControlName="precioNormal" placeholder="Precio normal">
+          </div>
+
+          <div class="input-contenedor">
+              <i class="fa-regular fa-money-bill-1 icon"></i>
+              <input type="number" formControlName="precioReducido" placeholder="Precio reducido">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Modificar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- Modal confirmar que se elimino el producto-->
+<div class="modal fade" id="confirmaEliminar" tabindex="-1" aria-labelledby="confirmaEliminar" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body abs-center" >
+        <h3>El producto se elimino con exito</h3>
+        <img src="assets/Gif/verificado.gif" alt="" width="200px" class="mx-auto d-block">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
